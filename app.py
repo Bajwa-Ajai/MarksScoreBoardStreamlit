@@ -130,7 +130,7 @@ fig_writing.update_layout(
 )
 
 hist_data = [df['math'], df['writing'], df['reading']]
-colors = ['#FAEDF0', '#525B88', '#EC255A']
+colors = ['#FAEDF0', '#4D4DA6', '#ff5f77']
 Group_labels = ['math', 'writing', 'reading']
 
 fig = ff.create_distplot(hist_data, Group_labels, bin_size=5, colors=colors)
@@ -139,10 +139,13 @@ a = df.groupby('race').count()
 labels = a.index
 values = a['gender']
 
+colors = ['#333399', '#4D4DA6', '#6666B3', '#9999CC', '#CCCCE6']
+
 fig_pie = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='label+percent',
                                  insidetextorientation='radial'
                                  )])
-
+fig_pie.update_traces(hoverinfo='label+percent', textfont_size=15,
+                      marker=dict(colors=colors, line=dict(color='#000000', width=0.5)))
 
 left_column, right_column = st.columns(2)
 left_column.plotly_chart(fig_pie, use_container_width=True)
