@@ -49,6 +49,9 @@ PrepC = st.sidebar.multiselect(
 df_selection = df.query(
     "gender == @gender & parental_level_education == @PE & test_prep_course==@PrepC"
 )
+# Selection of data to be displayed on the dashboard
+# initially calculations are shown considering all the data
+
 
 # Main HomePage for the dashboard
 st.title(":bar_chart: Marks Dashboard")
@@ -72,7 +75,31 @@ with right_column:
 
 st.markdown("""---""")
 
-# SALES BY PRODUCT LINE [BAR CHART]
+# Pie chart to get the distribution of different groups inn the data
+a = df.groupby('race').count()
+labels = a.index
+values = a['gender']
+
+colors = ['#333399', '#4D4DA6', '#6666B3', '#9999CC', '#CCCCE6']
+
+fig_pie = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='label+percent',
+                                 insidetextorientation='radial'
+                                 )])
+fig_pie.update_traces(hoverinfo='label+percent', textfont_size=15,
+                      marker=dict(colors=colors, line=dict(color='#000000', width=0.5)))
+
+
+# Distplot considering marks of math,writing and reading considering bin size of 5
+# distplot contains histogram,kde plot and a rug is displayed
+hist_data = [df['math'], df['writing'], df['reading']]
+colors = ['#FAEDF0', '#4D4DA6', '#ff5f77']
+Group_labels = ['math', 'writing', 'reading']
+
+fig_dist = ff.create_distplot(
+    hist_data, Group_labels, bin_size=5, colors=colors)
+
+
+# Bar Graph for avg math marks according to different groups
 avg_Math_wrt_race = (
     df_selection.groupby(by=["race"]).mean()[
         ["math"]]
@@ -91,7 +118,8 @@ fig_math.update_layout(
     xaxis=(dict(showgrid=False))
 )
 
-# SALES BY HOUR [BAR CHART]
+# Bar graph for avergae reading marks according to the groups
+
 avg_Reading_wrt_race = (
     df_selection.groupby(by=["race"]).mean()[
         ["reading"]]
@@ -110,6 +138,8 @@ fig_reading.update_layout(
     xaxis=(dict(showgrid=False))
 )
 
+
+# Bar graph for average writing marks according to groups
 avg_Writing_wrt_race = (
     df_selection.groupby(by=["race"]).mean()[
         ["writing"]]
@@ -129,27 +159,9 @@ fig_writing.update_layout(
     xaxis=(dict(showgrid=False))
 )
 
-hist_data = [df['math'], df['writing'], df['reading']]
-colors = ['#FAEDF0', '#4D4DA6', '#ff5f77']
-Group_labels = ['math', 'writing', 'reading']
-
-fig = ff.create_distplot(hist_data, Group_labels, bin_size=5, colors=colors)
-
-a = df.groupby('race').count()
-labels = a.index
-values = a['gender']
-
-colors = ['#333399', '#4D4DA6', '#6666B3', '#9999CC', '#CCCCE6']
-
-fig_pie = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='label+percent',
-                                 insidetextorientation='radial'
-                                 )])
-fig_pie.update_traces(hoverinfo='label+percent', textfont_size=15,
-                      marker=dict(colors=colors, line=dict(color='#000000', width=0.5)))
-
 left_column, right_column = st.columns(2)
 left_column.plotly_chart(fig_pie, use_container_width=True)
-right_column.plotly_chart(fig, use_container_width=True)
+right_column.plotly_chart(fig_dist, use_container_width=True)
 
 st.markdown("""---""")
 
@@ -162,7 +174,7 @@ st.markdown("""---""")
 left_column_3, right_column_3 = st.columns(2)
 left_column_3.plotly_chart(fig_writing, use_container_width=True)
 
-# ---- HIDE STREAMLIT STYLE ----
+# Hiding the footer and other non useful components provided by streamlit by default
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
