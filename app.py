@@ -1,8 +1,8 @@
 
 import pandas as pd
+import plotly.figure_factory as ff
 import plotly.express as px
 import streamlit as st
-import plotly.figure_factory as ff
 import plotly.graph_objects as go
 
 
@@ -80,7 +80,7 @@ a = df.groupby('race').count()
 labels = a.index
 values = a['gender']
 
-colors = ['#333399', '#4D4DA6', '#6666B3', '#9999CC', '#CCCCE6']
+colors = ['#04b8a7', '#04877b', '#18968b', '#2beddc', '#76f5ea']
 
 fig_pie = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='label+percent',
                                  insidetextorientation='radial'
@@ -92,7 +92,7 @@ fig_pie.update_traces(hoverinfo='label+percent', textfont_size=15,
 # Distplot considering marks of math,writing and reading considering bin size of 5
 # distplot contains histogram,kde plot and a rug is displayed
 hist_data = [df['math'], df['writing'], df['reading']]
-colors = ['#FAEDF0', '#4D4DA6', '#ff5f77']
+colors = ['#FAEDF0', '#03DAC6', '#CF6679']
 Group_labels = ['math', 'writing', 'reading']
 
 fig_dist = ff.create_distplot(
@@ -110,7 +110,7 @@ fig_math = px.bar(
     y=avg_Math_wrt_race.index,
     orientation="h",
     title="<b>Average Math score</b>",
-    color_discrete_sequence=["#525B88"] * len(avg_Math_wrt_race),
+    color_discrete_sequence=["#03DAC6"] * len(avg_Math_wrt_race),
     template="plotly_white",
 )
 fig_math.update_layout(
@@ -130,7 +130,7 @@ fig_reading = px.bar(
     y=avg_Reading_wrt_race.index,
     orientation="h",
     title="<b>Average Reading Score</b>",
-    color_discrete_sequence=["#525B88"] * len(avg_Reading_wrt_race),
+    color_discrete_sequence=["#03DAC6"] * len(avg_Reading_wrt_race),
     template="plotly_white",
 )
 fig_reading.update_layout(
@@ -151,7 +151,7 @@ fig_writing = px.bar(
     y=avg_Writing_wrt_race.index,
     orientation="h",
     title="<b>Average Writing Score</b>",
-    color_discrete_sequence=["#525B88"] * len(avg_Writing_wrt_race),
+    color_discrete_sequence=["#03DAC6"] * len(avg_Writing_wrt_race),
     template="plotly_white",
 )
 fig_writing.update_layout(
